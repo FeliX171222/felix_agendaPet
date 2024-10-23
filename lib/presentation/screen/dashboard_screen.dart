@@ -267,7 +267,7 @@ class _DashboardScreenState
               children: [
                 Expanded(
                   child: TextField(
-                    controller: controller.searchController,
+                    controller: controller.searchPetController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
                       hintText: 'Procurar Pets',
@@ -283,7 +283,7 @@ class _DashboardScreenState
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
-                    String query = controller.searchController.text.trim();
+                    String query = controller.searchPetController.text.trim();
                     controller.searchPets(query);
                   },
                   style: ElevatedButton.styleFrom(

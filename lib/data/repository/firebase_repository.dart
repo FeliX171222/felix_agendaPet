@@ -1,3 +1,4 @@
+import 'package:agendamento_pet/domain/model/agendamento.dart';
 import 'package:agendamento_pet/domain/model/clientes.dart';
 import 'package:agendamento_pet/domain/model/pet.dart';
 import 'package:agendamento_pet/domain/model/usuario.dart';
@@ -6,16 +7,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class FirestoreRepository {
+  //usuário
   Future<void> addUser(Usuario usuario);
   Future<void> changePassword(String newPassword);
   Future<Usuario?> getUserDetails(String userId);
   Future<void> updateUserDetails(Usuario usuario);
+
+  //clientes
   Future<List<Clientes>> fetchClients();
   Future<void> addClients(Clientes client);
 
+  //pets
   Future<void> addPet(Pet pet);
   Future<List<Pet>> fetchPets();
   Future<void> deletePet(String petId);
+
+  //agendamento
+  Future<void> addAgendamento(Agendamento agendamento);
+  Future<List<Agendamento>> fetchAgendamentos();
+  Future<void> deleteAgendamento(String agendamentoId);
 }
 
 @Injectable(as: FirestoreRepository)
@@ -124,6 +134,37 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   Future<void> deletePet(String petId) async {
     try {
       await firestore.collection('pets').doc(petId).delete();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addAgendamento(Agendamento agendamento) async {
+    try {
+      await firestore
+          .collection('agendamentos')
+          .doc(agendamento.id)
+          .set(agendamento.toJson());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Agendamento>> fetchAgendamentos() async {
+    try {
+      QuerySnapshot snapshot = await firestore.collection('agendamentos').get();
+      return snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteAgendamento(String agendamentoId) async {
+    try {
+      await firestore.collection('agendamentos').doc(agendamentoId).delete();
     } catch (e) {
       rethrow;
     }

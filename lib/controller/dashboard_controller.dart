@@ -4,6 +4,7 @@
 
 import 'package:agendamento_pet/constants/app_constanst.dart';
 import 'package:agendamento_pet/constants/dialog_helper.dart';
+import 'package:agendamento_pet/domain/model/agendamento.dart';
 import 'package:agendamento_pet/domain/model/clientes.dart';
 import 'package:agendamento_pet/domain/model/pet.dart';
 import 'package:agendamento_pet/domain/usecase/busca_cep_usecase.dart';
@@ -37,6 +38,7 @@ abstract class _DashboardControllerBase with Store {
   final TextEditingController estadoController = TextEditingController();
   final TextEditingController telefoneController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController searchPetController = TextEditingController();
   final TextEditingController cepController = TextEditingController();
 
   // Controladores para os campos de texto Pets
@@ -46,9 +48,11 @@ abstract class _DashboardControllerBase with Store {
   final TextEditingController nascimentoPetController = TextEditingController();
   final TextEditingController idadePetController = TextEditingController();
   final TextEditingController pesoPetController = TextEditingController();
+  final TextEditingController servicoPetController = TextEditingController();
   final TextEditingController idadeDecimalPetController = TextEditingController();
-  final TextEditingController tutorController= TextEditingController();
- // final TextEditingController searchController = TextEditingController();
+  final TextEditingController tutorController = TextEditingController();
+  final TextEditingController dataController = TextEditingController();
+  // final TextEditingController searchController = TextEditingController();
 
   final dHelper = DialogHelper();
 
@@ -59,7 +63,10 @@ abstract class _DashboardControllerBase with Store {
   ObservableList<Clientes> clients = ObservableList<Clientes>();
 
   @observable
-  ObservableList<Pet> pets = ObservableList<Pet>();
+  List<Pet> pets = [];
+
+  @observable
+  ObservableList<Agendamento> agendamentos = ObservableList<Agendamento>();
 
   @observable
   bool isLoading = false;
@@ -71,12 +78,21 @@ abstract class _DashboardControllerBase with Store {
   String errorMessage = '';
   String errorMessagePet = '';
 
+  @observable
+  String? selectedClient = "";
+
+  @observable
+  Pet? selectedPet;
+
+  String? selectedSexo;
+  DateTime? selectedDate;
+
   @action
   Future<void> cadastrarCliente({
     required BuildContext context,
     required String sexo,
   }) async {
-    if (!_validateFields()) return; // Validação dos campos
+    if (!_validateFields()) return;
 
     try {
       final cliente = Clientes(
@@ -161,7 +177,11 @@ abstract class _DashboardControllerBase with Store {
     }
   }
 
-    @action
+  void setSelectedClient(String clientName) {
+    selectedClient = clientName;
+  }
+
+  @action
   Future<void> searchPets(String query) async {
     isLoadingPet = true;
     errorMessage = '';
@@ -177,8 +197,8 @@ abstract class _DashboardControllerBase with Store {
       // Filtra os pets com base na consulta
       pets = ObservableList.of(
         result
-            .where((pet) =>
-                pet.nome.toLowerCase().contains(query.toLowerCase()))
+            .where(
+                (pet) => pet.nome.toLowerCase().contains(query.toLowerCase()))
             .toList(),
       );
 
@@ -193,24 +213,29 @@ abstract class _DashboardControllerBase with Store {
     }
   }
 
+  @action
+  void setSelectedPet(Pet pet) {
+    selectedPet = pet;
+  }
+
   //@action
   //Future<void> fetchPets() async {
-   // isLoadingPet = true;
-   // errorMessagePet = '';
+  // isLoadingPet = true;
+  // errorMessagePet = '';
 
-   // try {
-    //  final result = await firebaseUsecase.fetchPets();
-    //  pets = ObservableList.of(result);
+  // try {
+  //  final result = await firebaseUsecase.fetchPets();
+  //  pets = ObservableList.of(result);
 
-    //  if (pets.isEmpty) {
-     //   errorMessagePet = 'Nenhum pet cadastrado.';
-    //  }
+  //  if (pets.isEmpty) {
+  //   errorMessagePet = 'Nenhum pet cadastrado.';
+  //  }
   //  } catch (e) {
-   //   errorMessagePet = e.toString();
- //     print("Erro ao buscar pets: $e");
+  //   errorMessagePet = e.toString();
+  //     print("Erro ao buscar pets: $e");
   //  } finally {
-   //   isLoadingPet = false;
-   // }
+  //   isLoadingPet = false;
+  // }
 //  }
 
   @action
@@ -376,26 +401,6 @@ abstract class _DashboardControllerBase with Store {
     }
   }
 
-  // @action
-  // Future<void> deleteClient(String clientId, BuildContext context) async {
-  //   try {
-  //     // Chama a função do use case para excluir o cliente do Firebase
-  //     await firebaseUsecase.deleteClient(clientId);
-  //     print('Cliente excluído com sucesso');
-
-  //     // Atualiza a lista de clientes após a exclusão
-  //     await fetchClients();
-
-  //     // Exibe um diálogo de sucesso
-  //     await dHelper.showSuccessDialog(context, "Cliente excluído com sucesso!");
-  //   } catch (e) {
-  //     print("Erro ao excluir cliente: $e");
-  //     errorMessage = e.toString();
-  //     await dHelper.showErrorDialog(
-  //         context, "Erro ao excluir cliente: $errorMessage");
-  //   }
-  // }
-
   @action
   Future<void> deletePet(String petId) async {
     isLoading = true;
@@ -411,6 +416,115 @@ abstract class _DashboardControllerBase with Store {
       errorMessagePet = e.toString();
       await dHelper.showErrorDialog(
           ctx, "Erro ao excluir pet: $errorMessagePet");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  // Carregar Agendamentos
+  @action
+  Future<void> carregarAgendamentos() async {
+    isLoading = true;
+    try {
+      final fetchedAgendamentos = await firebaseUsecase.fetchAgendamentos();
+      agendamentos.clear();
+      agendamentos.addAll(fetchedAgendamentos);
+    } catch (e) {
+      // Tratar erros
+      print("Erro ao carregar agendamentos: $e");
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  // Verificar disponibilidade
+  @action
+  Future<bool> verificarDisponibilidade(DateTime dataHora) async {
+    try {
+      final fetchedAgendamentos = await firebaseUsecase.fetchAgendamentos();
+      return fetchedAgendamentos
+          .every((agendamento) => agendamento.dataHora != dataHora);
+    } catch (e) {
+      print("Erro ao verificar disponibilidade: $e");
+      return false;
+    }
+  }
+
+  @action
+  Future<void> salvarAgendamento(
+      Agendamento agendamento, BuildContext context) async {
+    try {
+      // Verifica se já existe um agendamento no mesmo horário
+      bool existeAgendamentoNoMesmoHorario = agendamentos
+          .any((a) => a.dataHora.isAtSameMomentAs(agendamento.dataHora));
+
+      if (existeAgendamentoNoMesmoHorario) {
+        // Exibe o alerta de conflito
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Conflito de Agendamento"),
+            content: const Text("Já existe um agendamento para este horário."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Se não existir conflito, salva o agendamento
+        await firebaseUsecase.addAgendamento(agendamento);
+        agendamentos.add(agendamento); // Atualiza a lista local
+
+        // Exibe uma mensagem de sucesso
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Sucesso"),
+            content: const Text("Agendamento salvo com sucesso!"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      print("Erro ao salvar agendamento: $e");
+
+      // Exibe o alerta de erro
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Erro"),
+          content: Text("Erro ao salvar agendamento: $e"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      throw e;
+    }
+  }
+
+  // Função para excluir agendamento
+  @action
+  Future<void> excluirAgendamento(Agendamento agendamento) async {
+    try {
+      isLoading = true;
+      await firebaseUsecase.deleteAgendamento(agendamento.id!);
+
+      // Remove o agendamento da lista local
+      agendamentos.removeWhere((a) => a.id == agendamento.id);
+    } catch (e) {
+      // Tratar erro, exibir mensagem de erro se necessário
     } finally {
       isLoading = false;
     }
