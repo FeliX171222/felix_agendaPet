@@ -4,13 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Agendamento {
   String? id;
   String petId;
-  String userId; // ID do usuário associado ao agendamento
+  String userId;
   String petNome;
   String raca;
   String idade;
   String peso;
   String sexo;
-  DateTime dataHora;
+  DateTime data;
+  String hora;
   Servico servico;
 
   Agendamento({
@@ -22,14 +23,14 @@ class Agendamento {
     required this.idade,
     required this.peso,
     required this.sexo,
-    required this.dataHora,
+    required this.data,
+    required this.hora,
     required this.servico,
   });
 
-  // Converter para JSON para salvar no Firestore
   Map<String, dynamic> toJson() {
     return {
-      'id': id, // Incluindo o id para o caso de atualização
+      'id': id,
       'petId': petId,
       'userId': userId,
       'petNome': petNome,
@@ -37,29 +38,28 @@ class Agendamento {
       'idade': idade,
       'peso': peso,
       'sexo': sexo,
-      'dataHora': Timestamp.fromDate(dataHora),
+      'data': Timestamp.fromDate(data),
+      'hora': hora,
       'servico': servico.toJson(),
     };
   }
 
-  // Criar a partir de um Map (ou LinkedMap)
   factory Agendamento.fromMap(Map<String, dynamic> data) {
     return Agendamento(
-      id: data['id'], // id pode ser nulo se não estiver presente
+      id: data['id'],
       petId: data['petId'] ?? '',
-      userId: data['userId'] ?? '', // Garantindo um valor padrão
+      userId: data['userId'] ?? '',
       petNome: data['petNome'] ?? '',
       raca: data['raca'] ?? '',
       idade: data['idade'] ?? '',
       peso: data['peso'] ?? '',
       sexo: data['sexo'] ?? '',
-      dataHora: (data['dataHora'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      servico:
-          Servico.fromMap(data['servico'] ?? {}), // Garantindo um objeto padrão
+      data: (data['data'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      hora: data['hora'] ?? '',
+      servico: Servico.fromMap(data['servico'] ?? {}),
     );
   }
 
-  // Criar a partir de um documento do Firestore
   factory Agendamento.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Agendamento(
@@ -71,8 +71,15 @@ class Agendamento {
       idade: data['idade'] ?? '',
       peso: data['peso'] ?? '',
       sexo: data['sexo'] ?? '',
-      dataHora: (data['dataHora'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      data: (data['data'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      hora: data['hora'] ?? '',
       servico: Servico.fromMap(data['servico'] ?? {}),
     );
+  }
+}
+
+extension DateTimeExtension on DateTime {
+  bool isSameDay(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
   }
 }

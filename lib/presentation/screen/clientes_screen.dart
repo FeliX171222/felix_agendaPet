@@ -2,9 +2,12 @@ import 'package:agendamento_pet/controller/dashboard_controller.dart';
 import 'package:agendamento_pet/core/utils/all_widgets.dart';
 import 'package:agendamento_pet/core/utils/colors.dart';
 import 'package:agendamento_pet/core/utils/widget_stateful.dart';
+import 'package:agendamento_pet/domain/model/clientes.dart';
 import 'package:agendamento_pet/presentation/widgets/custom_buttom_widget.dart';
 import 'package:agendamento_pet/presentation/widgets/custom_container_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +21,12 @@ class ClientesScreen extends StatefulWidget {
 
 class _ClientesScreenState
     extends WidgetStateful<ClientesScreen, DashboardController> {
+  @override
+  void initState() {
+    controller.fetchClients();
+    super.initState();
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   final maskFormatter = MaskTextInputFormatter(
@@ -37,6 +46,8 @@ class _ClientesScreenState
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
+              const SizedBox(width: 16),
+              _buildClientesListSection(),
               Expanded(
                 flex: 2,
                 child: Card(
@@ -300,15 +311,90 @@ class _ClientesScreenState
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                flex: 1,
-                child: Image.asset(
-                  'assets/images/petshop.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClientesListSection() {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.calendar_today, color: MColors.blue),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Clientes',
+                      style: TextStyle(
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.bold,
+                        color: MColors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Pesquisar Cliente',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Observer(
+                  builder: (_) {
+                    if (controller.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (controller.clients.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'Nenhum cliente encontrado.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      );
+                    }
+
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: controller.clients.length,
+                        itemBuilder: (context, index) {
+                          final clientes = controller.clients[index];
+                          return ListTile(
+                            title: Text(clientes.nome),
+                            subtitle: Text(
+                                'Nascimento: ${DateFormat('dd/MM/yyyy').format(clientes.dataNascimento)}\n'
+                                'Telefone: ${clientes.telefone}\n'
+                                'Cidade: ${clientes.cidade}'),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                _confirmarExclusao(context, clientes);
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -425,6 +511,33 @@ class _ClientesScreenState
           validator: validator,
         ),
       ],
+    );
+  }
+
+  void _confirmarExclusao(BuildContext context, Clientes clientes) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Excluir Cliente'),
+          content: const Text('Tem certeza que deseja excluir o cliente'),
+          actions: [
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Excluir'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await controller.deleteClients(clientes, clientes.userId);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

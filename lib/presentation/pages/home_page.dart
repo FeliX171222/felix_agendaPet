@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _children = [
     // ignore: prefer_const_constructors
     DashboardScreen(),
+
     const AgendamentosScreen(),
     const ClientesScreen(),
     const PetsScreen(),
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   final List<String> _appBarTitle = [
-    "Dashboard",
+    "Home",
     "Agendamentos",
     "Clientes",
     "Pets",

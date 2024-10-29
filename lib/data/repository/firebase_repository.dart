@@ -17,6 +17,7 @@ abstract class FirestoreRepository {
   //clientes
   Future<List<Clientes>> fetchClients(String userId);
   Future<void> addClients(Clientes client, String userId);
+  Future<void> deleteClients(Clientes client, String userId);
 
   //pets
   Future<void> addPet(Pet pet, String clientId);
@@ -33,6 +34,7 @@ abstract class FirestoreRepository {
   Future<void> addServico(Servico servico);
   Future<List<Servico>> fetchServico();
   Future<void> deleteServico(String servicoId);
+  Future<void> updateServico(String servicoId, Servico servico);
 }
 
 @Injectable(as: FirestoreRepository)
@@ -119,9 +121,20 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   }
 
   @override
+  Future<void> deleteClients(Clientes client, String userId) async {
+    try {
+      await firestore.collection('clientes').doc(client.id).delete();
+      print("Cliente deletado com sucesso!");
+    } catch (e) {
+      print("Erro ao deletar cliente: $e");
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> addPet(Pet pet, String clientId) async {
     try {
-      pet.id = clientId; // Vincula o pet ao cliente
+      pet.id = clientId;
       await firestore.collection('pets').add(pet.toJson());
     } catch (e) {
       rethrow;
@@ -134,12 +147,12 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       // Filtra os pets pelo clienteId
       QuerySnapshot snapshot = await firestore
           .collection('pets')
-          .where('clienteId', isEqualTo: clienteId) // Filtra pelo clienteId
+          .where('clienteId', isEqualTo: clienteId)
           .get();
 
       return snapshot.docs.map((doc) => Pet.fromDocument(doc)).toList();
     } catch (e) {
-      rethrow; // Repassa o erro para a camada superior
+      rethrow;
     }
   }
 
@@ -170,17 +183,29 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       QuerySnapshot snapshot = await firestore.collection('agendamentos').get();
 
       if (snapshot.docs.isNotEmpty) {
-        return snapshot.docs
-            .map((doc) => Agendamento.fromDocument(doc))
-            .toList();
+        List<Agendamento> agendamentos =
+            snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+
+        agendamentos.sort((a, b) {
+          int dateComparison = a.data.compareTo(b.data);
+
+          if (dateComparison == 0) {
+            DateTime horaA = DateTime.parse('1970-01-01 ${a.hora}');
+            DateTime horaB = DateTime.parse('1970-01-01 ${b.hora}');
+            return horaA.compareTo(horaB);
+          }
+
+          return dateComparison;
+        });
+
+        return agendamentos;
       } else {
         print("Nenhum agendamento encontrado.");
         return [];
       }
     } catch (e) {
-      // Trata erros e imprime a mensagem de erro
       print("Erro ao buscar agendamentos: $e");
-      rethrow; // Relança o erro para tratamento na camada superior
+      rethrow;
     }
   }
 
@@ -214,5 +239,13 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         await FirebaseFirestore.instance.collection('servicos').get();
 
     return snapshot.docs.map((doc) => Servico.fromDocument(doc)).toList();
+  }
+
+  @override
+  Future<void> updateServico(String servicoId, Servico servico) async {
+    await FirebaseFirestore.instance
+        .collection('servicos')
+        .doc(servicoId)
+        .update(servico.toJson());
   }
 }

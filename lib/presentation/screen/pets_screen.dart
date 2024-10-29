@@ -2,11 +2,13 @@ import 'package:agendamento_pet/controller/dashboard_controller.dart';
 import 'package:agendamento_pet/core/utils/all_widgets.dart';
 import 'package:agendamento_pet/core/utils/colors.dart';
 import 'package:agendamento_pet/core/utils/widget_stateful.dart';
+import 'package:agendamento_pet/domain/model/pet.dart';
 import 'package:agendamento_pet/presentation/widgets/custom_buttom_widget.dart';
 import 'package:agendamento_pet/presentation/widgets/custom_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class PetsScreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class _PetsScreenState extends WidgetStateful<PetsScreen, DashboardController> {
     super.initState();
 
     controller.fetchClients();
+    controller.fetchPets();
   }
 
   List<String> tutores = [];
@@ -212,8 +215,10 @@ class _PetsScreenState extends WidgetStateful<PetsScreen, DashboardController> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
+                const SizedBox(width: 16),
+                _buildPetsListSection(),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Card(
                     elevation: 5,
                     shape: RoundedRectangleBorder(
@@ -520,13 +525,90 @@ class _PetsScreenState extends WidgetStateful<PetsScreen, DashboardController> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  flex: 1,
-                  child: Image.asset(
-                    'assets/images/petshop.png',
-                    fit: BoxFit.cover,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPetsListSection() {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.calendar_today, color: MColors.blue),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Pets',
+                      style: TextStyle(
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.bold,
+                        color: MColors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Pesquisar Pets',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
+                ),
+                const SizedBox(height: 16),
+                Observer(
+                  builder: (_) {
+                    if (controller.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (controller.pets.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'Nenhum Pet encontrado.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      );
+                    }
+
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: controller.pets.length,
+                        itemBuilder: (context, index) {
+                          final pets = controller.pets[index];
+                          return ListTile(
+                            title: Text(pets.nome),
+                            subtitle: Text(
+                              'Nascimento: ${pets.nascimento}\n'
+                              'Raça: ${pets.raca}\n'
+                              'Peso: ${pets.peso}\n'
+                              'Porte: ${pets.porte}\n',
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                _confirmarExclusao(context, pets);
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -599,6 +681,33 @@ class _PetsScreenState extends WidgetStateful<PetsScreen, DashboardController> {
           validator: validator,
         ),
       ],
+    );
+  }
+
+  void _confirmarExclusao(BuildContext context, Pet pet) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Excluir Pet'),
+          content: const Text('Tem certeza que deseja excluir o Pet?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Excluir'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await controller.deletePet(pet.clienteId);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

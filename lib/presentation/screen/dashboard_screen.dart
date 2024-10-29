@@ -20,6 +20,7 @@ class _DashboardScreenState
   void initState() {
     controller.fetchClients();
     controller.fetchPets();
+    controller.carregarAgendamentos();
     super.initState();
   }
 
@@ -32,59 +33,59 @@ class _DashboardScreenState
           padding: const EdgeInsets.all(16.0),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // Check if the screen width is less than a threshold for mobile
               bool isMobile = constraints.maxWidth < 600;
 
-              return Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: _buildCard(
-                          icon: Icons.schedule,
-                          label: 'Agendamentos do mês',
-                          count: controller.agendamentos.length,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildCard(
-                          icon: Icons.schedule,
-                          label: 'Agendamentos do dia',
-                          count: 0,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildCard(
-                          icon: Icons.cancel,
-                          label: 'Cancelamentos do mês',
-                          count: 0,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Responsive Column for Clients and Pets Sections
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: isMobile ? 1 : 2,
-                          child: _buildClientesSection(controller),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          flex: isMobile ? 1 : 2,
-                          child: _buildPetsSection(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
+              return Observer(
+                  builder: (_) => Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _buildCard(
+                                  icon: Icons.schedule,
+                                  label: 'Agendamentos do mês',
+                                  count: controller.agendamentosMes,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildCard(
+                                  icon: Icons.schedule,
+                                  label: 'Agendamentos do dia',
+                                  count: controller.agendamentosDia,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildCard(
+                                  icon: Icons.cancel,
+                                  label: 'Cancelamentos do mês',
+                                  count: 0,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          // Responsive Column for Clients and Pets Sections
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: isMobile ? 1 : 2,
+                                  child: _buildClientesSection(controller),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  flex: isMobile ? 1 : 2,
+                                  child: _buildPetsSection(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ));
             },
           ),
         ),
@@ -326,13 +327,21 @@ class _DashboardScreenState
                       itemCount: controller.pets.length,
                       itemBuilder: (context, index) {
                         final pets = controller.pets[index];
+                        final clients = controller.clients[index];
                         return GestureDetector(
                           child: ListTile(
                             leading: pets.raca == "Cão"
                                 ? Icon(MdiIcons.cat, color: MColors.blue)
                                 : Icon(MdiIcons.dog, color: MColors.blue),
                             title: Text(pets.nome),
-                            subtitle: Text("${pets.tipo} - ${pets.raca}"),
+                            subtitle: Text(
+                              "${pets.tipo} - ${pets.raca}\n${clients.nome} - ${clients.telefone}",
+                              softWrap: true,
+                              maxLines:
+                                  2, // Limite para duas linhas, ajustável se necessário
+                              overflow: TextOverflow
+                                  .ellipsis, // Adiciona '...' se o texto for muito longo
+                            ),
                             onTap: () {},
                           ),
                         );

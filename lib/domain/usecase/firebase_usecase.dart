@@ -14,6 +14,7 @@ abstract class FirebaseUsecase {
   Future<void> updateUserDetails(Usuario usuario);
   Future<List<Clientes>> fetchClients(String userId);
   Future<void> addClients(Clientes client, String userId);
+  Future<void> deleteClients(Clientes client, String userId);
 
   // Pets
   Future<void> addPet(Pet pet, String clientId);
@@ -30,6 +31,7 @@ abstract class FirebaseUsecase {
   Future<void> addServico(Servico servico);
   Future<List<Servico>> fetchServico();
   Future<void> deleteServico(String servicoId);
+  Future<void> updateServico(String servicoId, Servico servico);
 }
 
 @Injectable(as: FirebaseUsecase)
@@ -88,6 +90,15 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
   Future<void> addClients(Clientes client, String userId) async {
     try {
       await firestoreRepository.addClients(client, userId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteClients(Clientes client, String userId) async {
+    try {
+      await firestoreRepository.deleteClients(client, userId);
     } catch (e) {
       rethrow;
     }
@@ -172,6 +183,15 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
   Future<List<Servico>> fetchServico() async {
     try {
       return await firestoreRepository.fetchServico();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateServico(String servicoId, Servico servico) async {
+    try {
+      return await firestoreRepository.updateServico(servicoId, servico);
     } catch (e) {
       rethrow;
     }

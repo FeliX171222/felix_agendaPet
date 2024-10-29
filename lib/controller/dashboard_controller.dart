@@ -56,10 +56,13 @@ abstract class _DashboardControllerBase with Store {
   final TextEditingController idadeDecimalPetController =
       TextEditingController();
   final TextEditingController dataController = TextEditingController();
+  final TextEditingController tutorPetController = TextEditingController();
 
 // Controladores para os campos de texto Serviço
 
   final TextEditingController nomeServicoController = TextEditingController();
+  final TextEditingController tipoServicoController = TextEditingController();
+  final TextEditingController porteServicoController = TextEditingController();
   final TextEditingController precoServicoController = TextEditingController();
   final TextEditingController descricaoServicoController =
       TextEditingController();
@@ -84,10 +87,16 @@ abstract class _DashboardControllerBase with Store {
   List<Servico> servico = [];
 
   @observable
+  List<String> availableTimeSlots = [];
+
+  @observable
   bool isLoading = false;
 
   @observable
   bool isLoadingPet = false;
+
+  @observable
+  bool isTimeSlotEnabled = true;
 
   @observable
   String errorMessage = '';
@@ -102,11 +111,33 @@ abstract class _DashboardControllerBase with Store {
   @observable
   Servico? selectedServico;
 
+  @observable
+  String? selectedTimeSlot;
+
+  @observable
+  int agendamentosDia = 0;
+
+  @observable
+  int agendamentosMes = 0;
+
   String? selectedSexo;
 
   DateTime? selectedDate;
 
   DateTime? dataNascimento;
+
+  final List<String> timeSlots = [
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '13:30',
+    '14:30',
+    '15:30',
+    '16:30',
+    '17:30',
+    '18:30',
+  ];
 
   String get currentUserId {
     final User? user = _firebaseAuth.currentUser;
@@ -228,6 +259,18 @@ abstract class _DashboardControllerBase with Store {
 
   void setSelectedClient(String clientName) {
     selectedClient = clientName;
+  }
+
+  @action
+  Future<void> deleteClients(Clientes clientes, String userId) async {
+    try {
+      isLoading = true;
+      await firebaseUsecase.deleteClients(clientes, userId);
+
+      await fetchClients();
+    } finally {
+      isLoading = false;
+    }
   }
 
   @action
@@ -414,14 +457,11 @@ abstract class _DashboardControllerBase with Store {
   @action
   int calcularIdade(String dataNascimento) {
     try {
-      // Converte a string da data de nascimento para um objeto DateTime
       DateTime nascimento = DateFormat('dd/MM/yyyy').parse(dataNascimento);
       DateTime agora = DateTime.now();
 
-      // Calcula a diferença em anos
       int idade = agora.year - nascimento.year;
 
-      // Ajusta se o aniversário ainda não ocorreu neste ano
       if (agora.month < nascimento.month ||
           (agora.month == nascimento.month && agora.day < nascimento.day)) {
         idade--;
@@ -430,7 +470,7 @@ abstract class _DashboardControllerBase with Store {
       return idade;
     } catch (e) {
       print("Erro ao calcular a idade: $e");
-      return 0; // Retorna 0 ou uma outra lógica de erro, conforme necessário
+      return 0;
     }
   }
 
@@ -457,43 +497,59 @@ abstract class _DashboardControllerBase with Store {
   // Carregar Agendamentos
   @action
   Future<void> carregarAgendamentos() async {
-    isLoading = true;
-    try {
-      final fetchedAgendamentos = await firebaseUsecase.fetchAgendamentos();
+    List<Agendamento> fetchedAgendamentos =
+        await firebaseUsecase.fetchAgendamentos();
 
-      if (fetchedAgendamentos.isNotEmpty) {
-        agendamentos.clear();
-        agendamentos.addAll(fetchedAgendamentos);
-      } else {
-        print("Nenhum agendamento encontrado.");
-      }
-    } catch (e) {
-      print("Erro ao carregar agendamentos: $e");
-    } finally {
-      isLoading = false;
-    }
+    agendamentos = ObservableList<Agendamento>.of(fetchedAgendamentos);
+
+    // Atualizar contagens
+    agendamentosDia = agendamentos.where((a) => isToday(a.data)).length;
+    agendamentosMes = agendamentos.where((a) => isThisMonth(a.data)).length;
   }
 
-  // Verificar disponibilidade
-  @action
-  Future<bool> verificarDisponibilidade(DateTime dataHora) async {
-    try {
-      final fetchedAgendamentos = await firebaseUsecase.fetchAgendamentos();
-      return fetchedAgendamentos
-          .every((agendamento) => agendamento.dataHora != dataHora);
-    } catch (e) {
-      print("Erro ao verificar disponibilidade: $e");
-      return false;
-    }
+  bool isToday(DateTime date) {
+    final today = DateTime.now();
+    return date.year == today.year &&
+        date.month == today.month &&
+        date.day == today.day;
+  }
+
+  bool isThisMonth(DateTime date) {
+    final today = DateTime.now();
+    return date.year == today.year && date.month == today.month;
+  }
+
+  List<String> getAvailableTimeSlots(DateTime selectedDate) {
+    // Obtenha os agendamentos do dia selecionado
+    final agendamentosDoDia = agendamentos
+        .where((agendamento) => agendamento.data
+            .isSameDay(selectedDate)) // Método para comparar datas
+        .toList();
+
+    // Extraia os horários ocupados
+    final ocupados =
+        agendamentosDoDia.map((agendamento) => agendamento.hora).toSet();
+
+    // Retorne os horários disponíveis
+    return timeSlots.where((time) => !ocupados.contains(time)).toList();
   }
 
   @action
   Future<void> salvarAgendamento(
       Agendamento agendamento, BuildContext context) async {
     try {
-      // Verifica se já existe um agendamento no mesmo horário
-      bool existeAgendamentoNoMesmoHorario = agendamentos
-          .any((a) => a.dataHora.isAtSameMomentAs(agendamento.dataHora));
+      final agendamentosExistentes = await firebaseUsecase.fetchAgendamentos();
+
+      DateTime horaAgendamento =
+          DateTime.parse('1970-01-01 ${agendamento.hora}');
+
+      bool existeAgendamentoNoMesmoHorario = agendamentosExistentes.any((a) {
+        DateTime horaExistente = DateTime.parse('1970-01-01 ${a.hora}');
+
+        return a.data.isSameDay(agendamento.data) &&
+            horaExistente.hour == horaAgendamento.hour &&
+            horaExistente.minute == horaAgendamento.minute;
+      });
 
       if (existeAgendamentoNoMesmoHorario) {
         // Exibe o alerta de conflito
@@ -516,7 +572,10 @@ abstract class _DashboardControllerBase with Store {
           agendamento.userId,
           agendamento.petId,
         );
+
+        // Adiciona o agendamento à lista local
         agendamentos.add(agendamento);
+        clearPetFields();
 
         // Exibe uma mensagem de sucesso
         showDialog(
@@ -561,10 +620,7 @@ abstract class _DashboardControllerBase with Store {
       isLoading = true;
       await firebaseUsecase.deleteAgendamento(agendamento.id!);
 
-      // Remove o agendamento da lista local
       agendamentos.removeWhere((a) => a.id == agendamento.id);
-    } catch (e) {
-      // Tratar erro, exibir mensagem de erro se necessário
     } finally {
       isLoading = false;
     }
@@ -620,5 +676,29 @@ abstract class _DashboardControllerBase with Store {
     } finally {
       isLoading = false;
     }
+  }
+
+  @action
+  Future<void> updateServico(String servicoId, Servico servico) async {
+    isLoading = true;
+    try {
+      await firebaseUsecase.updateServico(servicoId, servico);
+      print('Serviço atualizado com sucesso.');
+
+      await fecthServico();
+    } catch (e) {
+      print('Erro ao atualizar serviço: $e');
+      rethrow;
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  List<Servico> getServicosPorPorte(Pet? petSelecionado) {
+    if (petSelecionado == null) return [];
+
+    return servico
+        .where((servico) => servico.porte == petSelecionado.porte)
+        .toList();
   }
 }
