@@ -12,6 +12,7 @@ abstract class FirebaseUsecase {
   Future<void> updatePassword(String newPassword);
   Future<Usuario?> getUserDetails(String userId);
   Future<void> updateUserDetails(Usuario usuario);
+<<<<<<< HEAD
   Future<List<Clientes>> fetchClients(String userId);
   Future<void> addClients(Clientes client, String userId);
   Future<void> deleteClients(Clientes client, String userId);
@@ -32,6 +33,20 @@ abstract class FirebaseUsecase {
   Future<List<Servico>> fetchServico();
   Future<void> deleteServico(String servicoId);
   Future<void> updateServico(String servicoId, Servico servico);
+=======
+  Future<List<Clientes>> fetchClients();
+  Future<void> addClients(Clientes client);
+
+  // Pets
+  Future<void> addPet(Pet pet);
+  Future<List<Pet>> fetchPets();
+  Future<void> deletePet(String petId);
+
+  // Agendamento
+  Future<void> addAgendamento(Agendamento agendamento);
+  Future<List<Agendamento>> fetchAgendamentos();
+  Future<void> deleteAgendamento(String agendamentoId);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 }
 
 @Injectable(as: FirebaseUsecase)
@@ -95,6 +110,7 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
     }
   }
 
+  // Pets
   @override
   Future<void> deleteClients(Clientes client, String userId) async {
     try {
@@ -134,10 +150,16 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
 
   // Agendamento
   @override
+<<<<<<< HEAD
   Future<void> addAgendamento(
       Agendamento agendamento, String petId, String userId) async {
     try {
       await firestoreRepository.addAgendamento(agendamento, petId, userId);
+=======
+  Future<void> addAgendamento(Agendamento agendamento) async {
+    try {
+      await firestoreRepository.addAgendamento(agendamento);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
     } catch (e) {
       rethrow;
     }
@@ -160,6 +182,7 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
       rethrow;
     }
   }
+<<<<<<< HEAD
 
   @override
   Future<void> addServico(Servico servico) async {
@@ -196,4 +219,6 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
       rethrow;
     }
   }
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 }

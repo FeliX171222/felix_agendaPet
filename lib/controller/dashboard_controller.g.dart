@@ -73,6 +73,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$servicoAtom =
       Atom(name: '_DashboardControllerBase.servico', context: context);
 
@@ -105,6 +106,8 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   late final _$isLoadingAtom =
       Atom(name: '_DashboardControllerBase.isLoading', context: context);
 
@@ -201,6 +204,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$selectedServicoAtom =
       Atom(name: '_DashboardControllerBase.selectedServico', context: context);
 
@@ -265,6 +269,8 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   late final _$cadastrarClienteAsyncAction = AsyncAction(
       '_DashboardControllerBase.cadastrarCliente',
       context: context);
@@ -294,6 +300,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     return _$fetchClientsAsyncAction.run(() => super.fetchClients());
   }
 
+<<<<<<< HEAD
   late final _$deleteClientsAsyncAction =
       AsyncAction('_DashboardControllerBase.deleteClients', context: context);
 
@@ -303,6 +310,8 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.deleteClients(clientes, userId));
   }
 
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   late final _$searchPetsAsyncAction =
       AsyncAction('_DashboardControllerBase.searchPets', context: context);
 
@@ -367,6 +376,19 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.carregarAgendamentos());
   }
 
+<<<<<<< HEAD
+=======
+  late final _$verificarDisponibilidadeAsyncAction = AsyncAction(
+      '_DashboardControllerBase.verificarDisponibilidade',
+      context: context);
+
+  @override
+  Future<bool> verificarDisponibilidade(DateTime dataHora) {
+    return _$verificarDisponibilidadeAsyncAction
+        .run(() => super.verificarDisponibilidade(dataHora));
+  }
+
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   late final _$salvarAgendamentoAsyncAction = AsyncAction(
       '_DashboardControllerBase.salvarAgendamento',
       context: context);
@@ -388,6 +410,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.excluirAgendamento(agendamento));
   }
 
+<<<<<<< HEAD
   late final _$fecthServicoAsyncAction =
       AsyncAction('_DashboardControllerBase.fecthServico', context: context);
 
@@ -421,6 +444,8 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.updateServico(servicoId, servico));
   }
 
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   late final _$_DashboardControllerBaseActionController =
       ActionController(name: '_DashboardControllerBase', context: context);
 
@@ -475,6 +500,7 @@ isAuthenticated: ${isAuthenticated},
 clients: ${clients},
 pets: ${pets},
 agendamentos: ${agendamentos},
+<<<<<<< HEAD
 servico: ${servico},
 availableTimeSlots: ${availableTimeSlots},
 isLoading: ${isLoading},
@@ -487,6 +513,13 @@ selectedServico: ${selectedServico},
 selectedTimeSlot: ${selectedTimeSlot},
 agendamentosDia: ${agendamentosDia},
 agendamentosMes: ${agendamentosMes}
+=======
+isLoading: ${isLoading},
+isLoadingPet: ${isLoadingPet},
+errorMessage: ${errorMessage},
+selectedClient: ${selectedClient},
+selectedPet: ${selectedPet}
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
     ''';
   }
 }

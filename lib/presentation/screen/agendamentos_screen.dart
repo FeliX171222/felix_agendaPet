@@ -6,12 +6,18 @@ import 'package:agendamento_pet/core/utils/colors.dart';
 import 'package:agendamento_pet/core/utils/widget_stateful.dart';
 import 'package:agendamento_pet/domain/model/agendamento.dart';
 import 'package:agendamento_pet/domain/model/pet.dart';
+<<<<<<< HEAD
 import 'package:agendamento_pet/domain/model/servico.dart';
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 import 'package:agendamento_pet/presentation/widgets/custom_buttom_widget.dart';
 import 'package:agendamento_pet/presentation/widgets/custom_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+<<<<<<< HEAD
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 import 'package:intl/intl.dart';
 
 class AgendamentosScreen extends StatefulWidget {
@@ -27,7 +33,10 @@ class _AgendamentosScreenState
   void initState() {
     controller.fetchPets();
     controller.carregarAgendamentos();
+<<<<<<< HEAD
     controller.fecthServico();
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
     super.initState();
   }
 
@@ -109,9 +118,15 @@ class _AgendamentosScreenState
                               'Raça: ${agendamento.raca}, '
                               'Idade: ${agendamento.idade} anos, '
                               'Peso: ${agendamento.peso} kg\n'
+<<<<<<< HEAD
                               'serviço: ${agendamento.servico.nome}\n'
                               'Data: ${DateFormat('dd/MM/yyyy').format(agendamento.data)} '
                               'Hora: ${agendamento.hora}',
+=======
+                              'Serviço: ${agendamento.servico},'
+                              'Data: ${DateFormat('dd/MM/yyyy').format(agendamento.dataHora)} '
+                              'Hora: ${DateFormat('HH:mm').format(agendamento.dataHora)}',
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
                             ),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
@@ -160,6 +175,7 @@ class _AgendamentosScreenState
                 ),
                 const SizedBox(height: 16),
                 _buildPetDropdown(),
+<<<<<<< HEAD
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -180,6 +196,14 @@ class _AgendamentosScreenState
                   ],
                 ),
                 const SizedBox(height: 10),
+=======
+                buildTextField('Raça:', 'Raça', controller.racaPetController),
+                buildTextField(
+                    'Idade:', 'Idade do pet', controller.idadePetController),
+                buildTextField(
+                    'Peso:', 'Peso do pet', controller.pesoPetController),
+                const SizedBox(height: 8),
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
                 const Text('Sexo:',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 DropdownButtonFormField<String>(
@@ -201,10 +225,14 @@ class _AgendamentosScreenState
                   ),
                 ),
                 const SizedBox(height: 16),
+<<<<<<< HEAD
                 _buildServicoDropdown(),
                 const SizedBox(height: 16),
                 // buildDateField(context),
                 _buildDateSlotField(context),
+=======
+                buildDateField(context),
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
@@ -228,6 +256,7 @@ class _AgendamentosScreenState
     );
   }
 
+<<<<<<< HEAD
   Widget _buildDateSlotField(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,6 +320,8 @@ class _AgendamentosScreenState
     );
   }
 
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   Widget _buildPetDropdown() {
     return Observer(
       builder: (_) {
@@ -299,6 +330,7 @@ class _AgendamentosScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+<<<<<<< HEAD
               const Text('Pet:',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -325,6 +357,28 @@ class _AgendamentosScreenState
                     hintText: 'Selecione um pet',
                     border: OutlineInputBorder(),
                   ),
+=======
+              const Text('Pet:', style: TextStyle(fontWeight: FontWeight.bold)),
+              DropdownButtonFormField<Pet>(
+                value: controller.selectedPet,
+                items: controller.pets.map((pet) {
+                  return DropdownMenuItem(
+                    value: pet,
+                    child: Text(pet.nome),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    controller.selectedPet = value;
+                    if (controller.selectedPet != null) {
+                      _fillPetDetails(controller.selectedPet!);
+                    }
+                  });
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Selecione um pet',
+                  border: OutlineInputBorder(),
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
                 ),
               ),
             ],
@@ -334,6 +388,7 @@ class _AgendamentosScreenState
     );
   }
 
+<<<<<<< HEAD
   Widget _buildServicoDropdown() {
     return Observer(
       builder: (_) {
@@ -377,6 +432,8 @@ class _AgendamentosScreenState
     );
   }
 
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
   void _fillPetDetails(Pet pet) {
     controller.racaPetController.text = pet.raca;
     controller.idadePetController.text = pet.idade.toString();
@@ -418,13 +475,21 @@ class _AgendamentosScreenState
           controller: controller.dataController,
           readOnly: true,
           decoration: const InputDecoration(
+<<<<<<< HEAD
             hintText: 'dd/MM/yyyy, --:--',
+=======
+            hintText: 'dd/MM/aaaa, --:--',
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
             suffixIcon: Icon(Icons.calendar_today),
             border: OutlineInputBorder(),
           ),
           onTap: () async {
             FocusScope.of(context).requestFocus(FocusNode());
 
+<<<<<<< HEAD
+=======
+            // Seleciona a data
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
             DateTime? pickedDate = await showDatePicker(
               context: context,
               initialDate: DateTime.now(),
@@ -433,6 +498,7 @@ class _AgendamentosScreenState
             );
 
             if (pickedDate != null) {
+<<<<<<< HEAD
               controller.selectedDate = pickedDate;
               print(controller.selectedDate);
 
@@ -472,10 +538,30 @@ class _AgendamentosScreenState
                 );
 
                 // Atualiza o controlador e a data formatada
+=======
+              // Seleciona a hora
+              TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+
+              if (pickedTime != null) {
+                // Combina data e hora
+                final DateTime selectedDateTime = DateTime(
+                  pickedDate.year,
+                  pickedDate.month,
+                  pickedDate.day,
+                  pickedTime.hour,
+                  pickedTime.minute,
+                );
+
+                // Formata data e hora
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
                 setState(() {
                   controller.selectedDate = selectedDateTime;
                   controller.dataController.text =
                       DateFormat('dd/MM/yyyy, HH:mm').format(selectedDateTime);
+<<<<<<< HEAD
 
                   // Formatação correta da hora
                   controller.selectedTimeSlot =
@@ -483,6 +569,8 @@ class _AgendamentosScreenState
 
                   print(
                       'Hora selecionada: ${controller.selectedTimeSlot}'); // Para debug
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
                 });
               }
             }
@@ -494,15 +582,22 @@ class _AgendamentosScreenState
 
   Future<void> _confirmarAgendamento(BuildContext context) async {
     try {
+<<<<<<< HEAD
       if (controller.selectedPet == null ||
           controller.selectedServico == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text('Por favor, selecione um pet e serviço.')),
+=======
+      if (controller.selectedPet == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Por favor, selecione um pet.')),
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
         );
         return;
       }
 
+<<<<<<< HEAD
       // Verifique se a hora foi selecionada
       if (controller.selectedTimeSlot == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -513,11 +608,14 @@ class _AgendamentosScreenState
 
       // Cria o agendamento
       final String userId = controller.currentUserId;
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
       final agendamento = Agendamento(
         petNome: controller.selectedPet!.nome,
         raca: controller.racaPetController.text,
         idade: controller.idadePetController.text,
         peso: controller.pesoPetController.text,
+<<<<<<< HEAD
         sexo: controller.selectedSexo!,
         data: controller.selectedDate!,
         hora: controller.selectedTimeSlot!,
@@ -527,6 +625,24 @@ class _AgendamentosScreenState
       );
 
       // Salva o agendamento
+=======
+        servico: controller.servicoPetController.text,
+        sexo: controller.selectedSexo!,
+        dataHora: controller.selectedDate!,
+      );
+
+      bool existeAgendamentoNoMesmoHorario = controller.agendamentos
+          .any((a) => a.dataHora.isAtSameMomentAs(agendamento.dataHora));
+
+      if (existeAgendamentoNoMesmoHorario) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Já existe um agendamento para este horário.')),
+        );
+        return;
+      }
+
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
       await controller.salvarAgendamento(agendamento, context);
     } catch (e) {
       print(e);
@@ -545,14 +661,24 @@ class _AgendamentosScreenState
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
+<<<<<<< HEAD
                 Navigator.of(context).pop();
+=======
+                Navigator.of(context).pop(); // Fecha o dialog
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
               },
             ),
             TextButton(
               child: const Text('Excluir'),
               onPressed: () async {
+<<<<<<< HEAD
                 Navigator.of(context).pop();
                 await controller.excluirAgendamento(agendamento);
+=======
+                Navigator.of(context).pop(); // Fecha o dialog
+                await controller
+                    .excluirAgendamento(agendamento); // Exclui o agendamento
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
               },
             ),
           ],

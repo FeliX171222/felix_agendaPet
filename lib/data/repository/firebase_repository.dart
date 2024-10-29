@@ -13,6 +13,7 @@ abstract class FirestoreRepository {
   Future<void> changePassword(String newPassword);
   Future<Usuario?> getUserDetails(String userId);
   Future<void> updateUserDetails(Usuario usuario);
+<<<<<<< HEAD
 
   //clientes
   Future<List<Clientes>> fetchClients(String userId);
@@ -35,6 +36,22 @@ abstract class FirestoreRepository {
   Future<List<Servico>> fetchServico();
   Future<void> deleteServico(String servicoId);
   Future<void> updateServico(String servicoId, Servico servico);
+=======
+
+  //clientes
+  Future<List<Clientes>> fetchClients();
+  Future<void> addClients(Clientes client);
+
+  //pets
+  Future<void> addPet(Pet pet);
+  Future<List<Pet>> fetchPets();
+  Future<void> deletePet(String petId);
+
+  //agendamento
+  Future<void> addAgendamento(Agendamento agendamento);
+  Future<List<Agendamento>> fetchAgendamentos();
+  Future<void> deleteAgendamento(String agendamentoId);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 }
 
 @Injectable(as: FirestoreRepository)
@@ -166,12 +183,21 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   }
 
   @override
+<<<<<<< HEAD
   Future<void> addAgendamento(
       Agendamento agendamento, String petId, String userId) async {
     try {
       agendamento.petId = petId;
       agendamento.userId = userId;
       await firestore.collection('agendamentos').add(agendamento.toJson());
+=======
+  Future<void> addAgendamento(Agendamento agendamento) async {
+    try {
+      await firestore
+          .collection('agendamentos')
+          .doc(agendamento.id)
+          .set(agendamento.toJson());
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
     } catch (e) {
       rethrow;
     }
@@ -181,6 +207,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   Future<List<Agendamento>> fetchAgendamentos() async {
     try {
       QuerySnapshot snapshot = await firestore.collection('agendamentos').get();
+<<<<<<< HEAD
 
       if (snapshot.docs.isNotEmpty) {
         List<Agendamento> agendamentos =
@@ -205,6 +232,10 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       }
     } catch (e) {
       print("Erro ao buscar agendamentos: $e");
+=======
+      return snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+    } catch (e) {
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
       rethrow;
     }
   }
@@ -217,6 +248,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       rethrow;
     }
   }
+<<<<<<< HEAD
 
   @override
   Future<void> addServico(Servico servico) async {
@@ -248,4 +280,6 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         .doc(servicoId)
         .update(servico.toJson());
   }
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 }
