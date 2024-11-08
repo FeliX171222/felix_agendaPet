@@ -29,6 +29,7 @@ class _HomePageState extends WidgetStateful<HomePage, HomeController> {
   int _currentIndex = 0;
   final PageStorageBucket bucket = PageStorageBucket();
 
+<<<<<<< HEAD
   List<Widget> get _children {
     if (controller.role == 'manager') {
       return const [
@@ -85,6 +86,18 @@ class _HomePageState extends WidgetStateful<HomePage, HomeController> {
       ];
     }
   }
+=======
+  final List<Widget> _children = [
+    // ignore: prefer_const_constructors
+    DashboardScreen(),
+
+    const AgendamentosScreen(),
+    const ClientesScreen(),
+    const PetsScreen(),
+    const RelatoriosScreen(),
+    const ServicosScreen(),
+  ];
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
   void onTabTapped(int index) {
     setState(() {
@@ -92,6 +105,27 @@ class _HomePageState extends WidgetStateful<HomePage, HomeController> {
     });
   }
 
+<<<<<<< HEAD
+=======
+  final List<IconData> _tabIcons = [
+    Icons.home,
+    Icons.calendar_month,
+    Icons.person,
+    Icons.pets,
+    Icons.receipt_rounded,
+    Icons.settings,
+  ];
+
+  final List<String> _appBarTitle = [
+    "Home",
+    "Agendamentos",
+    "Clientes",
+    "Pets",
+    "Relatórios",
+    "Manutenções ",
+  ];
+
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   @override
   Widget build(BuildContext context) {
     return Observer(

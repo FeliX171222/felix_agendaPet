@@ -14,7 +14,11 @@ class Pet {
   String peso;
   String sexo;
   String tipo;
+<<<<<<< HEAD
   String tutor;
+=======
+  String clienteId;
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
   Pet({
     this.id,
@@ -27,7 +31,12 @@ class Pet {
     required this.peso,
     required this.sexo,
     required this.tipo,
+<<<<<<< HEAD
     required this.tutor,
+=======
+    required this.clienteId,
+
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   });
 
   factory Pet.fromJson(Map<String, dynamic> json) => _$PetFromJson(json);

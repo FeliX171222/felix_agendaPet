@@ -14,11 +14,19 @@ abstract class FirestoreRepository {
   Future<void> changePassword(String newPassword);
   Future<Usuario?> getUserDetails(String userId);
   Future<void> updateUserDetails(Usuario usuario);
+<<<<<<< HEAD
 
+<<<<<<< HEAD
   // Clientes
   Future<List<Clientes>> fetchClients();
   Future<void> addClients(Clientes client);
   Future<void> deleteClients(Clientes client);
+=======
+  //clientes
+  Future<List<Clientes>> fetchClients(String userId);
+  Future<void> addClients(Clientes client, String userId);
+  Future<void> deleteClients(Clientes client, String userId);
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
   // Pets
   Future<void> addPets(Pet pet);
@@ -39,6 +47,25 @@ abstract class FirestoreRepository {
   Future<List<Servico>> fetchServico();
   Future<void> deleteServico(String servicoId);
   Future<void> updateServico(String servicoId, Servico servico);
+<<<<<<< HEAD
+=======
+=======
+
+  //clientes
+  Future<List<Clientes>> fetchClients();
+  Future<void> addClients(Clientes client);
+
+  //pets
+  Future<void> addPet(Pet pet);
+  Future<List<Pet>> fetchPets();
+  Future<void> deletePet(String petId);
+
+  //agendamento
+  Future<void> addAgendamento(Agendamento agendamento);
+  Future<List<Agendamento>> fetchAgendamentos();
+  Future<void> deleteAgendamento(String agendamentoId);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 }
 
 @Injectable(as: FirestoreRepository)
@@ -140,9 +167,27 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   }
 
   @override
+<<<<<<< HEAD
   Future<void> deleteClients(Clientes client) async {
     try {
       await firestore.collection('clientes').doc(client.id).delete();
+=======
+  Future<void> deleteClients(Clientes client, String userId) async {
+    try {
+      await firestore.collection('clientes').doc(client.id).delete();
+      print("Cliente deletado com sucesso!");
+    } catch (e) {
+      print("Erro ao deletar cliente: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addPet(Pet pet, String clientId) async {
+    try {
+      pet.id = clientId;
+      await firestore.collection('pets').add(pet.toJson());
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     } catch (e) {
       rethrow;
     }
@@ -151,6 +196,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   @override
   Future<void> addPets(Pet pet) async {
     try {
+<<<<<<< HEAD
       if (pet.id != null) {
         await firestore.collection('pets').doc(pet.id).delete();
       }
@@ -160,6 +206,19 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         ...pet.toJson(),
         'clientId': pet.clientId,
       });
+=======
+      // Filtra os pets pelo clienteId
+      QuerySnapshot snapshot = await firestore
+          .collection('pets')
+          .where('clienteId', isEqualTo: clienteId)
+          .get();
+
+      return snapshot.docs.map((doc) => Pet.fromDocument(doc)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
       // Atualizar o campo 'id' com o ID do novo documento
       await docRef.update({'id': docRef.id});
@@ -169,6 +228,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   }
 
   @override
+<<<<<<< HEAD
   Future<List<Pet>> fetchPets(String clientId) async {
     try {
       String? userId = auth.currentUser?.uid;
@@ -204,8 +264,21 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
 
   @override
   Future<void> addAgendamento(Agendamento agendamento, String petId) async {
+=======
+<<<<<<< HEAD
+  Future<void> addAgendamento(
+      Agendamento agendamento, String petId, String userId) async {
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     try {
       await firestore.collection('agendamentos').add(agendamento.toJson());
+=======
+  Future<void> addAgendamento(Agendamento agendamento) async {
+    try {
+      await firestore
+          .collection('agendamentos')
+          .doc(agendamento.id)
+          .set(agendamento.toJson());
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
     } catch (e) {
       rethrow;
     }
@@ -215,6 +288,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   Future<List<Agendamento>> fetchAgendamentos(
       {bool paraVerificacaoConflito = false}) async {
     try {
+<<<<<<< HEAD
       String? userId = auth.currentUser?.uid;
       bool isManager = await isUserManager(userId);
 
@@ -225,6 +299,28 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
             .collection('agendamentos')
             .where('motivoCancel', isEqualTo: "")
             .get();
+=======
+      QuerySnapshot snapshot = await firestore.collection('agendamentos').get();
+<<<<<<< HEAD
+
+      if (snapshot.docs.isNotEmpty) {
+        List<Agendamento> agendamentos =
+            snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+
+        agendamentos.sort((a, b) {
+          int dateComparison = a.data.compareTo(b.data);
+
+          if (dateComparison == 0) {
+            DateTime horaA = DateTime.parse('1970-01-01 ${a.hora}');
+            DateTime horaB = DateTime.parse('1970-01-01 ${b.hora}');
+            return horaA.compareTo(horaB);
+          }
+
+          return dateComparison;
+        });
+
+        return agendamentos;
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
       } else {
         // Usuários não-gerentes acessam apenas seus próprios agendamentos
         snapshot = await firestore
@@ -271,6 +367,13 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       return agendamentos;
     } catch (e) {
       print("Erro ao buscar agendamentos: $e");
+<<<<<<< HEAD
+=======
+=======
+      return snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+    } catch (e) {
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
       rethrow;
     }
   }
@@ -382,6 +485,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       rethrow;
     }
   }
+<<<<<<< HEAD
 
   @override
   Future<void> updateAgendamento(
@@ -425,4 +529,9 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         .doc(servicoId)
         .update(servico.toJson());
   }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 }

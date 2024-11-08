@@ -12,11 +12,18 @@ abstract class FirebaseUsecase {
   Future<void> updatePassword(String newPassword);
   Future<Usuario?> getUserDetails(String userId);
   Future<void> updateUserDetails(Usuario usuario);
+<<<<<<< HEAD
 
   //Clients
   Future<List<Clientes>> fetchClients(String userId);
   Future<void> addClient(Clientes client, String userId);
   Future<void> deleteClient(Clientes client, String userId);
+=======
+<<<<<<< HEAD
+  Future<List<Clientes>> fetchClients(String userId);
+  Future<void> addClients(Clientes client, String userId);
+  Future<void> deleteClients(Clientes client, String userId);
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
   // Pets
   Future<void> addPet(Pet pet);
@@ -38,6 +45,23 @@ abstract class FirebaseUsecase {
   Future<List<Servico>> fetchServicos();
   Future<void> deleteServico(String servicoId);
   Future<void> updateServico(String servicoId, Servico servico);
+<<<<<<< HEAD
+=======
+=======
+  Future<List<Clientes>> fetchClients();
+  Future<void> addClients(Clientes client);
+
+  // Pets
+  Future<void> addPet(Pet pet);
+  Future<List<Pet>> fetchPets();
+  Future<void> deletePet(String petId);
+
+  // Agendamento
+  Future<void> addAgendamento(Agendamento agendamento);
+  Future<List<Agendamento>> fetchAgendamentos();
+  Future<void> deleteAgendamento(String agendamentoId);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 }
 
 @Injectable(as: FirebaseUsecase)
@@ -112,7 +136,21 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
 
   // Pets
   @override
+<<<<<<< HEAD
   Future<void> addPet(Pet pet) async {
+=======
+  Future<void> deleteClients(Clientes client, String userId) async {
+    try {
+      await firestoreRepository.deleteClients(client, userId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Pets
+  @override
+  Future<void> addPet(Pet pet, String clientId) async {
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     try {
       await firestoreRepository.addPets(pet);
     } catch (e) {
@@ -140,10 +178,20 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
 
   // Agendamentos
   @override
+<<<<<<< HEAD
   Future<void> addAgendamento(
       Agendamento agendamento, String petId, String userId) async {
     try {
+<<<<<<< HEAD
       await firestoreRepository.addAgendamento(agendamento, petId);
+=======
+      await firestoreRepository.addAgendamento(agendamento, petId, userId);
+=======
+  Future<void> addAgendamento(Agendamento agendamento) async {
+    try {
+      await firestoreRepository.addAgendamento(agendamento);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     } catch (e) {
       rethrow;
     }
@@ -177,6 +225,7 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
       rethrow;
     }
   }
+<<<<<<< HEAD
 
   @override
   Future<void> updateAgendamento(
@@ -225,4 +274,15 @@ class FirebaseUsecaseImpl implements FirebaseUsecase {
       rethrow;
     }
   }
+
+  @override
+  Future<void> updateServico(String servicoId, Servico servico) async {
+    try {
+      return await firestoreRepository.updateServico(servicoId, servico);
+    } catch (e) {
+      rethrow;
+    }
+  }
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 }
