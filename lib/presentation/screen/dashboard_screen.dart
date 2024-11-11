@@ -22,7 +22,14 @@ class _DashboardScreenState
     controller.fetchClients();
     controller.fetchPets();
     controller.carregarAgendamentos();
+<<<<<<< HEAD
     controller.carregarAgendamentosCancelados();
+=======
+<<<<<<< HEAD
+    controller.carregarAgendamentosCancelados();
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
     super.initState();
   }
 
@@ -63,7 +70,15 @@ class _DashboardScreenState
                                 child: _buildCard(
                                   icon: Icons.cancel,
                                   label: 'Cancelamentos do mês',
+<<<<<<< HEAD
                                   count: controller.agendamentosCanceladosMes,
+=======
+<<<<<<< HEAD
+                                  count: controller.agendamentosCanceladosMes,
+=======
+                                  count: 0,
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
                                 ),
                               ),
                             ],
@@ -339,11 +354,20 @@ class _DashboardScreenState
                                 : Icon(MdiIcons.dog, color: MColors.blue),
                             title: Text(pets.nome),
                             subtitle: Text(
+<<<<<<< HEAD
                               "${pets.tipo} - ${pets.raca}\n"
                               "Tutor: ${clients.nome}",
                               softWrap: true,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
+=======
+                              "${pets.tipo} - ${pets.raca}\n${clients.nome} - ${clients.telefone}",
+                              softWrap: true,
+                              maxLines:
+                                  2, // Limite para duas linhas, ajustável se necessário
+                              overflow: TextOverflow
+                                  .ellipsis, // Adiciona '...' se o texto for muito longo
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
                             ),
                             onTap: () {},
                           ),

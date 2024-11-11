@@ -45,8 +45,11 @@ dependencies:
   intl:
   material_design_icons_flutter:
   table_calendar:
+<<<<<<< HEAD
   flutter_masked_text2:
   flutter_screenutil:
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 
 
   firebase_core: ^3.4.0
