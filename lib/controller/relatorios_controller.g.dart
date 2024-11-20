@@ -92,6 +92,7 @@ mixin _$RelatoriosController on _RelatoriosControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$agendamentosCanceladosAtom = Atom(
       name: '_RelatoriosControllerBase.agendamentosCancelados',
       context: context);
@@ -110,6 +111,8 @@ mixin _$RelatoriosController on _RelatoriosControllerBase, Store {
     });
   }
 
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   late final _$aniversariosPetsAtom = Atom(
       name: '_RelatoriosControllerBase.aniversariosPets', context: context);
 
@@ -276,7 +279,10 @@ servicosRealizados: ${servicosRealizados},
 clienteComMaisAgendamentos: ${clienteComMaisAgendamentos},
 aniversariosClientes: ${aniversariosClientes},
 agendamentos: ${agendamentos},
+<<<<<<< HEAD
 agendamentosCancelados: ${agendamentosCancelados},
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 aniversariosPets: ${aniversariosPets},
 servicosPorTipo: ${servicosPorTipo},
 clientesCadastrados: ${clientesCadastrados},

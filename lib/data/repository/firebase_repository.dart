@@ -14,11 +14,19 @@ abstract class FirestoreRepository {
   Future<void> changePassword(String newPassword);
   Future<Usuario?> getUserDetails(String userId);
   Future<void> updateUserDetails(Usuario usuario);
+<<<<<<< HEAD
 
+<<<<<<< HEAD
   // Clientes
   Future<List<Clientes>> fetchClients();
   Future<void> addClients(Clientes client);
   Future<void> deleteClients(Clientes client);
+=======
+  //clientes
+  Future<List<Clientes>> fetchClients(String userId);
+  Future<void> addClients(Clientes client, String userId);
+  Future<void> deleteClients(Clientes client, String userId);
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
   // Pets
   Future<void> addPets(Pet pet);
@@ -40,6 +48,10 @@ abstract class FirestoreRepository {
   Future<List<Servico>> fetchServico();
   Future<void> deleteServico(String servicoId);
   Future<void> updateServico(String servicoId, Servico servico);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
   //Relatórios
   Future<List<Map<String, dynamic>>> listarNovosClientes(
@@ -56,12 +68,36 @@ abstract class FirestoreRepository {
   Future<List<Map<String, dynamic>>> fetchClientesCadastrados(
       DateTime inicio, DateTime fim);
   Future<List<Map<String, dynamic>>> fetchServicosCadastrados();
+<<<<<<< HEAD
 
   Future<List<Agendamento>> listarAgendamentosCancelados(
       DateTime inicio, DateTime fim);
 
   Future<List<Agendamento>> listarAgendamentosRealizados(
       DateTime inicio, DateTime fim);
+=======
+=======
+<<<<<<< HEAD
+=======
+=======
+
+  //clientes
+  Future<List<Clientes>> fetchClients();
+  Future<void> addClients(Clientes client);
+
+  //pets
+  Future<void> addPet(Pet pet);
+  Future<List<Pet>> fetchPets();
+  Future<void> deletePet(String petId);
+
+  //agendamento
+  Future<void> addAgendamento(Agendamento agendamento);
+  Future<List<Agendamento>> fetchAgendamentos();
+  Future<void> deleteAgendamento(String agendamentoId);
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 }
 
 @Injectable(as: FirestoreRepository)
@@ -163,9 +199,27 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   }
 
   @override
+<<<<<<< HEAD
   Future<void> deleteClients(Clientes client) async {
     try {
       await firestore.collection('clientes').doc(client.id).delete();
+=======
+  Future<void> deleteClients(Clientes client, String userId) async {
+    try {
+      await firestore.collection('clientes').doc(client.id).delete();
+      print("Cliente deletado com sucesso!");
+    } catch (e) {
+      print("Erro ao deletar cliente: $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addPet(Pet pet, String clientId) async {
+    try {
+      pet.id = clientId;
+      await firestore.collection('pets').add(pet.toJson());
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     } catch (e) {
       rethrow;
     }
@@ -174,6 +228,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   @override
   Future<void> addPets(Pet pet) async {
     try {
+<<<<<<< HEAD
       if (pet.id != null) {
         await firestore.collection('pets').doc(pet.id).delete();
       }
@@ -183,6 +238,19 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         ...pet.toJson(),
         'clientId': pet.clientId,
       });
+=======
+      // Filtra os pets pelo clienteId
+      QuerySnapshot snapshot = await firestore
+          .collection('pets')
+          .where('clienteId', isEqualTo: clienteId)
+          .get();
+
+      return snapshot.docs.map((doc) => Pet.fromDocument(doc)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
       // Atualizar o campo 'id' com o ID do novo documento
       await docRef.update({'id': docRef.id});
@@ -192,6 +260,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   }
 
   @override
+<<<<<<< HEAD
   Future<List<Pet>> fetchPets(String clientId) async {
     try {
       String? userId = auth.currentUser?.uid;
@@ -227,8 +296,21 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
 
   @override
   Future<void> addAgendamento(Agendamento agendamento, String petId) async {
+=======
+<<<<<<< HEAD
+  Future<void> addAgendamento(
+      Agendamento agendamento, String petId, String userId) async {
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     try {
       await firestore.collection('agendamentos').add(agendamento.toJson());
+=======
+  Future<void> addAgendamento(Agendamento agendamento) async {
+    try {
+      await firestore
+          .collection('agendamentos')
+          .doc(agendamento.id)
+          .set(agendamento.toJson());
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
     } catch (e) {
       rethrow;
     }
@@ -249,6 +331,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   Future<List<Agendamento>> fetchAgendamentos(
       {bool paraVerificacaoConflito = false}) async {
     try {
+<<<<<<< HEAD
       String? userId = auth.currentUser?.uid;
       bool isManager = await isUserManager(userId);
 
@@ -260,6 +343,31 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
             .where('motivoCancel', isEqualTo: "")
             .where('isRealizado', isEqualTo: false)
             .get();
+<<<<<<< HEAD
+=======
+=======
+      QuerySnapshot snapshot = await firestore.collection('agendamentos').get();
+<<<<<<< HEAD
+
+      if (snapshot.docs.isNotEmpty) {
+        List<Agendamento> agendamentos =
+            snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+
+        agendamentos.sort((a, b) {
+          int dateComparison = a.data.compareTo(b.data);
+
+          if (dateComparison == 0) {
+            DateTime horaA = DateTime.parse('1970-01-01 ${a.hora}');
+            DateTime horaB = DateTime.parse('1970-01-01 ${b.hora}');
+            return horaA.compareTo(horaB);
+          }
+
+          return dateComparison;
+        });
+
+        return agendamentos;
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
       } else {
         snapshot = await firestore
             .collection('agendamentos')
@@ -297,6 +405,78 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       return agendamentos;
     } catch (e) {
       print("Erro ao buscar agendamentos: $e");
+<<<<<<< HEAD
+=======
+=======
+      return snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+    } catch (e) {
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Agendamento>> fetchAgendamentosCancelados() async {
+    try {
+      String? userId = auth.currentUser?.uid;
+      bool isManager = await isUserManager(userId);
+
+      QuerySnapshot snapshot;
+
+      if (isManager) {
+        // Gerentes podem acessar todos os agendamentos cancelados
+        snapshot = await firestore
+            .collection('agendamentos')
+            .where('motivoCancel',
+                isNotEqualTo: "") // Filtra agendamentos cancelados
+            .get();
+      } else {
+        // Usuários não-gerentes acessam apenas seus próprios agendamentos cancelados
+        snapshot = await firestore
+            .collection('agendamentos')
+            .where('userId', isEqualTo: userId)
+            .where('motivoCancel',
+                isNotEqualTo: "") // Filtra agendamentos cancelados
+            .get();
+      }
+
+      List<Agendamento> agendamentos =
+          snapshot.docs.map((doc) => Agendamento.fromDocument(doc)).toList();
+
+      // Cria um formatador de hora para garantir o formato correto
+      final timeFormat = DateFormat("HH:mm");
+
+      // Ordena os agendamentos por data e hora
+      agendamentos.sort((a, b) {
+        int dateComparison = a.data.compareTo(b.data);
+
+        if (dateComparison == 0) {
+          try {
+            DateTime horaA = timeFormat.parse(a.hora);
+            DateTime horaB = timeFormat.parse(b.hora);
+
+            // Ajusta a data para comparação
+            DateTime dateTimeA = DateTime(1970, 1, 1, horaA.hour, horaA.minute);
+            DateTime dateTimeB = DateTime(1970, 1, 1, horaB.hour, horaB.minute);
+
+            return dateTimeA.compareTo(dateTimeB);
+          } catch (e) {
+            print("Erro ao comparar horas: $e");
+            return 0;
+          }
+        }
+
+        return dateComparison;
+      });
+
+      if (agendamentos.isEmpty) {
+        print("Nenhum agendamento cancelado encontrado.");
+      }
+
+      return agendamentos;
+    } catch (e) {
+      print("Erro ao buscar agendamentos cancelados: $e");
       rethrow;
     }
   }
@@ -408,6 +588,19 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       rethrow;
     }
   }
+<<<<<<< HEAD
+
+  @override
+  Future<void> updateAgendamento(
+      String agendamentoId, Agendamento agendamento, String motivo) async {
+    await FirebaseFirestore.instance
+        .collection('agendamentos')
+        .doc(agendamentoId)
+        .update({
+      'motivoCancel': motivo,
+      'cancelledAt': DateTime.now(),
+    });
+  }
 
   @override
   Future<void> updateAgendamento(
@@ -451,6 +644,10 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
         .doc(servicoId)
         .update(servico.toJson());
   }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
   //RELATÓRIOS
 
@@ -458,12 +655,19 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
   @override
   Future<List<Map<String, dynamic>>> listarNovosClientes(
       DateTime inicio, DateTime fim) async {
+<<<<<<< HEAD
     final startTimestamp = Timestamp.fromDate(inicio);
     final endTimestamp = Timestamp.fromDate(fim);
     final querySnapshot = await firestore
         .collection('clientes')
         .where('dtCadastro', isGreaterThanOrEqualTo: startTimestamp)
         .where('dtCadastro', isLessThanOrEqualTo: endTimestamp)
+=======
+    final querySnapshot = await firestore
+        .collection('clientes')
+        .where('dtCadastro', isGreaterThanOrEqualTo: inicio)
+        .where('dtCadastro', isLessThanOrEqualTo: fim)
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
         .get();
 
     return querySnapshot.docs.map((doc) => doc.data()).toList();
@@ -529,6 +733,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
 
     final aniversariantes = querySnapshot.docs
         .where((doc) {
+<<<<<<< HEAD
           final nascimento = doc['nascimento'];
 
           DateTime nascimentoDate;
@@ -542,6 +747,13 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
 
           final int mesNascimento = nascimentoDate.month;
           final int diaNascimento = nascimentoDate.day;
+=======
+          final Timestamp nascimentoTimestamp = doc['nascimento'];
+          final DateTime nascimento = nascimentoTimestamp.toDate();
+
+          final int mesNascimento = nascimento.month;
+          final int diaNascimento = nascimento.day;
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
           return (mesNascimento > mesInicio ||
                   (mesNascimento == mesInicio && diaNascimento >= diaInicio)) &&
@@ -554,6 +766,10 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
     return aniversariantes;
   }
 
+<<<<<<< HEAD
+=======
+  // Função para buscar aniversários de pets em uma data específica
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   @override
   Future<List<Map<String, dynamic>>> aniversariosPets(
       DateTime inicio, DateTime fim) async {
@@ -566,6 +782,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
 
     final aniversariantes = querySnapshot.docs
         .where((doc) {
+<<<<<<< HEAD
           final nascimento = doc['nascimento'];
 
           DateTime nascimentoDate;
@@ -579,6 +796,13 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
 
           final int mesNascimento = nascimentoDate.month;
           final int diaNascimento = nascimentoDate.day;
+=======
+          final Timestamp nascimentoTimestamp = doc['nascimento'];
+          final DateTime nascimento = nascimentoTimestamp.toDate();
+
+          final int mesNascimento = nascimento.month;
+          final int diaNascimento = nascimento.day;
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
           return (mesNascimento > mesInicio ||
                   (mesNascimento == mesInicio && diaNascimento >= diaInicio)) &&
@@ -591,6 +815,10 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
     return aniversariantes;
   }
 
+<<<<<<< HEAD
+=======
+  // Função para gerar relatório de serviço por tipo de serviço
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   @override
   Future<Map<String, int>> relatorioServicosPorTipo(
       DateTime inicio, DateTime fim) async {
@@ -649,6 +877,7 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
       rethrow;
     }
   }
+<<<<<<< HEAD
 
   @override
   Future<List<Agendamento>> listarAgendamentosCancelados(
@@ -702,3 +931,13 @@ class FirestoreRepositoryImpl implements FirestoreRepository {
     }).toList();
   }
 }
+=======
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
+}
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04

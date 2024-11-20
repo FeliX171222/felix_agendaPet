@@ -56,6 +56,7 @@ abstract class _DashboardControllerBase with Store {
   final TextEditingController nascimentoPetController = TextEditingController();
   final TextEditingController idadePetController = TextEditingController();
   final TextEditingController pesoPetController = TextEditingController();
+<<<<<<< HEAD
   final TextEditingController idadeDecimalPetController =
       TextEditingController();
   final TextEditingController dataController = TextEditingController();
@@ -70,6 +71,13 @@ abstract class _DashboardControllerBase with Store {
       TextEditingController();
   final TextEditingController duracaoServicoController =
       TextEditingController();
+=======
+  final TextEditingController servicoPetController = TextEditingController();
+  final TextEditingController idadeDecimalPetController = TextEditingController();
+  final TextEditingController tutorController = TextEditingController();
+  final TextEditingController dataController = TextEditingController();
+  // final TextEditingController searchController = TextEditingController();
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 
   final dHelper = DialogHelper();
   final sHandler = AppSharedPreferences();
@@ -106,12 +114,18 @@ abstract class _DashboardControllerBase with Store {
 
   @observable
   ObservableList<Agendamento> agendamentos = ObservableList<Agendamento>();
+<<<<<<< HEAD
 
   @observable
   List<Servico> servico = [];
 
   @observable
   List<String> availableTimeSlots = [];
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
   @observable
   bool isLoading = false;
@@ -120,6 +134,7 @@ abstract class _DashboardControllerBase with Store {
   bool isLoadingPet = false;
 
   @observable
+<<<<<<< HEAD
   bool isLoadingSearchPet = false;
 
   @observable
@@ -144,6 +159,11 @@ abstract class _DashboardControllerBase with Store {
   List<String> racasSelecionadas = [];
 
   @observable
+=======
+  bool isTimeSlotEnabled = true;
+
+  @observable
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   String errorMessage = '';
   String errorMessagePet = '';
 
@@ -153,6 +173,7 @@ abstract class _DashboardControllerBase with Store {
   @observable
   Pet? selectedPet;
 
+<<<<<<< HEAD
   @observable
   Servico? selectedServico;
 
@@ -165,21 +186,36 @@ abstract class _DashboardControllerBase with Store {
   @observable
   int agendamentosMes = 0;
 
+<<<<<<< HEAD
   @observable
   int agendamentosCanceladosMes = 0;
 
+=======
+<<<<<<< HEAD
+  @observable
+  int agendamentosCanceladosMes = 0;
+
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
   String? selectedSexo;
 
   DateTime? selectedDate;
 
   DateTime? dataNascimento;
 
+<<<<<<< HEAD
   List<String> occupiedSlots = [];
 
+<<<<<<< HEAD
   List<String> slotsDisponiveis = [];
 
   List<String> horariosOcupados = [];
 
+=======
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   final List<String> timeSlots = [
     '08:00',
     '09:00',
@@ -193,6 +229,7 @@ abstract class _DashboardControllerBase with Store {
     '18:30',
   ];
 
+<<<<<<< HEAD
   final Map<String, List<String>> porte = {
     'Cão': [
       'Pequeno',
@@ -322,36 +359,62 @@ abstract class _DashboardControllerBase with Store {
     ],
   };
 
+<<<<<<< HEAD
+=======
+  List<String> slotsDisponiveis = [];
+  List<String> horariosOcupados = [];
+
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   String get currentUserId {
     final User? user = _firebaseAuth.currentUser;
     return user?.uid ?? '';
   }
 
+<<<<<<< HEAD
   getUserDetails() async {
     isLoading = true;
     role = await sHandler.readPreferences("role");
     isLoading = false;
   }
 
+=======
+<<<<<<< HEAD
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   final maskFormatter = MaskTextInputFormatter(
       mask: '(##) #####-####', filter: {"#": RegExp(r'[0-9]')});
 
   final maskCepFormatter = MaskTextInputFormatter(
       mask: '#####-###', filter: {"#": RegExp(r'[0-9]')});
 
+=======
+=======
+  String? selectedSexo;
+  DateTime? selectedDate;
+
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   @action
   Future<void> cadastrarCliente({
     required BuildContext context,
     required String sexo,
     required DateTime dataNascimento,
   }) async {
+<<<<<<< HEAD
     isLoading = true;
+=======
+<<<<<<< HEAD
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
     print("Iniciando cadastro de cliente...");
 
     if (!_validateFields()) {
       print("Validação de campos falhou");
       return;
     }
+=======
+    if (!_validateFields()) return;
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 
     try {
       final usuarioId = _firebaseAuth.currentUser?.uid;
@@ -491,10 +554,18 @@ abstract class _DashboardControllerBase with Store {
   }
 
   @action
+<<<<<<< HEAD
   Future<void> deleteClients(Clientes clientes, String userId) async {
     try {
       isLoading = true;
       await firebaseUsecase.deleteClient(clientes, userId);
+=======
+<<<<<<< HEAD
+  Future<void> deleteClients(Clientes clientes, String userId) async {
+    try {
+      isLoading = true;
+      await firebaseUsecase.deleteClients(clientes, userId);
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
       await fetchClients();
     } finally {
@@ -503,6 +574,11 @@ abstract class _DashboardControllerBase with Store {
   }
 
   @action
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   Future<void> searchPets(String query) async {
     isLoadingSearchPet = true;
     errorMessage = '';
@@ -538,6 +614,29 @@ abstract class _DashboardControllerBase with Store {
   void setSelectedPet(Pet pet) {
     selectedPet = pet;
   }
+<<<<<<< HEAD
+=======
+
+  //@action
+  //Future<void> fetchPets() async {
+  // isLoadingPet = true;
+  // errorMessagePet = '';
+
+  // try {
+  //  final result = await firebaseUsecase.fetchPets();
+  //  pets = ObservableList.of(result);
+
+  //  if (pets.isEmpty) {
+  //   errorMessagePet = 'Nenhum pet cadastrado.';
+  //  }
+  //  } catch (e) {
+  //   errorMessagePet = e.toString();
+  //     print("Erro ao buscar pets: $e");
+  //  } finally {
+  //   isLoadingPet = false;
+  // }
+//  }
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
 
   @action
   Future<void> fetchPets() async {
@@ -759,7 +858,11 @@ abstract class _DashboardControllerBase with Store {
         nome: nomePetController.text,
         raca: raca,
         porte: porte,
+<<<<<<< HEAD
         nascimento: dataNascimentoPet,
+=======
+        nascimento: dataNascimento!,
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
         idade: idadePetController.text,
         peso: pesoPetController.text,
         sexo: sexo,
@@ -826,13 +929,43 @@ abstract class _DashboardControllerBase with Store {
     } catch (e) {
       print("Erro ao calcular a idade: $e");
       return 0;
+<<<<<<< HEAD
+=======
+    }
+  }
+
+  @action
+  Future<void> deletePet(String petId) async {
+    isLoading = true;
+    try {
+      await firebaseUsecase.deletePet(petId);
+      print('Pet excluído com sucesso');
+
+      await fetchPets();
+
+      await dHelper.showSuccessDialog(ctx, "Pet excluído com sucesso!");
+    } catch (e) {
+      print("Erro ao excluir pet: $e");
+      errorMessagePet = e.toString();
+      await dHelper.showErrorDialog(
+          ctx, "Erro ao excluir pet: $errorMessagePet");
+    } finally {
+      isLoading = false;
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
     }
   }
 
   // Carregar Agendamentos
   @action
   Future<void> carregarAgendamentos() async {
+<<<<<<< HEAD
     isLoading = true;
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
     List<Agendamento> fetchedAgendamentos =
         await firebaseUsecase.fetchAgendamentos();
 
@@ -841,9 +974,59 @@ abstract class _DashboardControllerBase with Store {
     // Atualizar contagens
     agendamentosDia = agendamentos.where((a) => isToday(a.data)).length;
     agendamentosMes = agendamentos.where((a) => isThisMonth(a.data)).length;
+<<<<<<< HEAD
 
     // Contagem dos agendamentos cancelados no mês
+<<<<<<< HEAD
     isLoading = false;
+=======
+=======
+<<<<<<< HEAD
+
+    // Contagem dos agendamentos cancelados no mês
+=======
+  }
+
+  bool isToday(DateTime date) {
+    final today = DateTime.now();
+    return date.year == today.year &&
+        date.month == today.month &&
+        date.day == today.day;
+  }
+
+  bool isThisMonth(DateTime date) {
+    final today = DateTime.now();
+    return date.year == today.year && date.month == today.month;
+  }
+
+  List<String> getAvailableTimeSlots(DateTime selectedDate) {
+    // Obtenha os agendamentos do dia selecionado
+    final agendamentosDoDia = agendamentos
+        .where((agendamento) => agendamento.data
+            .isSameDay(selectedDate)) // Método para comparar datas
+        .toList();
+
+    // Extraia os horários ocupados
+    final ocupados =
+        agendamentosDoDia.map((agendamento) => agendamento.hora).toSet();
+
+    // Retorne os horários disponíveis
+    return timeSlots.where((time) => !ocupados.contains(time)).toList();
+=======
+    isLoading = true;
+    try {
+      final fetchedAgendamentos = await firebaseUsecase.fetchAgendamentos();
+      agendamentos.clear();
+      agendamentos.addAll(fetchedAgendamentos);
+    } catch (e) {
+      // Tratar erros
+      print("Erro ao carregar agendamentos: $e");
+    } finally {
+      isLoading = false;
+    }
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   }
 
   @action
@@ -906,23 +1089,61 @@ abstract class _DashboardControllerBase with Store {
           availableSlots.add(slot);
         }
       }
+<<<<<<< HEAD
+=======
+    }
+<<<<<<< HEAD
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
       return availableSlots;
     } catch (e) {
       print("Erro ao buscar horários disponíveis: $e");
       return [];
     }
+<<<<<<< HEAD
+=======
+
+    return availableSlots;
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   }
 
   @action
   Future<void> salvarAgendamento(
       Agendamento agendamento, BuildContext context) async {
     try {
+<<<<<<< HEAD
       isLoading = true;
 
       // Busca todos os agendamentos para verificação de conflitos
+=======
+<<<<<<< HEAD
+      // 1. Busca todos os agendamentos para verificar conflitos
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
       final agendamentosExistentes = await firebaseUsecase.fetchAgendamentos(
           paraVerificacaoConflito: true);
+=======
+<<<<<<< HEAD
+      final agendamentosExistentes = await firebaseUsecase.fetchAgendamentos();
+
+      DateTime horaAgendamento =
+          DateTime.parse('1970-01-01 ${agendamento.hora}');
+
+      bool existeAgendamentoNoMesmoHorario = agendamentosExistentes.any((a) {
+        DateTime horaExistente = DateTime.parse('1970-01-01 ${a.hora}');
+
+        return a.data.isSameDay(agendamento.data) &&
+            horaExistente.hour == horaAgendamento.hour &&
+            horaExistente.minute == horaAgendamento.minute;
+      });
+=======
+      // Verifica se já existe um agendamento no mesmo horário
+      bool existeAgendamentoNoMesmoHorario = agendamentos
+          .any((a) => a.dataHora.isAtSameMomentAs(agendamento.dataHora));
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 
       DateTime horaAgendamentoInicio =
           DateFormat("HH:mm").parse(agendamento.hora);
@@ -952,7 +1173,42 @@ abstract class _DashboardControllerBase with Store {
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: const Text("OK"),
+<<<<<<< HEAD
               )
+=======
+              ),
+            ],
+          ),
+        );
+      } else {
+<<<<<<< HEAD
+        await firebaseUsecase.addAgendamento(
+          agendamento,
+          agendamento.userId,
+          agendamento.petId,
+        );
+
+        // Adiciona o agendamento à lista local
+        agendamentos.add(agendamento);
+        clearPetFields();
+=======
+        // Se não existir conflito, salva o agendamento
+        await firebaseUsecase.addAgendamento(agendamento);
+        agendamentos.add(agendamento); // Atualiza a lista local
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+
+        // Exibe uma mensagem de sucesso
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Sucesso"),
+            content: const Text("Agendamento salvo com sucesso!"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
             ],
           ),
         );
@@ -1021,6 +1277,13 @@ abstract class _DashboardControllerBase with Store {
       isLoading = true;
       await firebaseUsecase.deleteAgendamento(agendamento.id!);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      agendamentos.removeWhere((a) => a.id == agendamento.id);
+=======
+      // Remove o agendamento da lista local
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
       agendamentos.removeWhere((a) => a.id == agendamento.id);
     } finally {
       isLoading = false;
@@ -1036,6 +1299,10 @@ abstract class _DashboardControllerBase with Store {
           agendamentoId, agendamento, motivo);
       print('Agendamento atualizado com sucesso.');
     } catch (e) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
       print('Erro ao atualizar agendamento: $e');
       rethrow;
     } finally {
@@ -1090,10 +1357,21 @@ abstract class _DashboardControllerBase with Store {
     } catch (e) {
       errorMessage = 'Erro ao buscar agendamentos: $e';
       print(errorMessage);
+<<<<<<< HEAD
+=======
+=======
+      // Tratar erro, exibir mensagem de erro se necessário
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
     } finally {
       isLoading = false;
     }
   }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
 
   @action
   Future<void> fecthServico() async {
@@ -1170,6 +1448,7 @@ abstract class _DashboardControllerBase with Store {
         .where((servico) => servico.porte == petSelecionado.porte)
         .toList();
   }
+<<<<<<< HEAD
 
   @action
   Future<void> searchServices(String query) async {
@@ -1210,6 +1489,10 @@ abstract class _DashboardControllerBase with Store {
       isLoading = false;
     }
   }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
   String formatDate(String date) {
     try {
@@ -1220,4 +1503,13 @@ abstract class _DashboardControllerBase with Store {
       return date;
     }
   }
+<<<<<<< HEAD
+=======
+=======
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 }

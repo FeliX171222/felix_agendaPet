@@ -23,8 +23,11 @@ class _RelatoriosScreenState
   List<Map<String, dynamic>> reportData = [];
 
   final List<String> reportOptions = [
+<<<<<<< HEAD
     'Agendamentos Cancelados',
     'Agendamentos Realizados',
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
     'Aniversários Clientes',
     'Aniversários Pet',
     'Novos Clientes',
@@ -67,8 +70,13 @@ class _RelatoriosScreenState
   // Função para resetar os campos quando uma nova opção for selecionada
   void _resetFields() {
     setState(() {
+<<<<<<< HEAD
       selectedPeriod = null;
       reportData = [];
+=======
+      selectedPeriod = null; // Reseta o período
+      reportData = []; // Limpa os dados do relatório
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
     });
   }
 
@@ -171,10 +179,13 @@ class _RelatoriosScreenState
         return _buildServicosCadastradosReport();
       case 'Serviços Realizados':
         return _buildContarServicosRealizadosReport();
+<<<<<<< HEAD
       case 'Agendamentos Cancelados':
         return _buildAgendamentosCanceladosReport();
       case 'Agendamentos Realizados':
         return _buildAgendamentosRealizadosReport();
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
       default:
         return const Center(child: Text('Relatório não implementado'));
@@ -224,6 +235,7 @@ class _RelatoriosScreenState
     );
   }
 
+<<<<<<< HEAD
   Widget _buildAgendamentosCanceladosReport() {
     return _buildReport(
       reportData,
@@ -249,6 +261,8 @@ class _RelatoriosScreenState
     );
   }
 
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   Widget _buildReport(List<Map<String, dynamic>> reportData,
       List<String> columns, List<String> dataKeys) {
     return SingleChildScrollView(
@@ -269,6 +283,7 @@ class _RelatoriosScreenState
           return DataRow(
             cells: dataKeys.map((key) {
               final value = item[key];
+<<<<<<< HEAD
               String displayValue = value?.toString() ?? 'N/A';
 
               if (key == 'cancelledAt' || key == 'data' && value is Timestamp) {
@@ -287,6 +302,12 @@ class _RelatoriosScreenState
                 displayValue =
                     DateFormat('dd/MM/yyyy').format((value).toDate());
               }
+=======
+              final displayValue = (key == 'nascimento' ||
+                      key == 'dtCadastro' && value is Timestamp)
+                  ? DateFormat('dd/MM/yyyy').format(value.toDate())
+                  : value?.toString() ?? 'N/A';
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
 
               return DataCell(Text(displayValue));
             }).toList(),

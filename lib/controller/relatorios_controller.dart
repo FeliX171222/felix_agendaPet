@@ -32,10 +32,13 @@ abstract class _RelatoriosControllerBase with Store {
   ObservableList<Agendamento> agendamentos = ObservableList<Agendamento>();
 
   @observable
+<<<<<<< HEAD
   ObservableList<Agendamento> agendamentosCancelados =
       ObservableList<Agendamento>();
 
   @observable
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   ObservableList<Map<String, dynamic>> aniversariosPets = ObservableList.of([]);
 
   @observable
@@ -73,12 +76,19 @@ abstract class _RelatoriosControllerBase with Store {
     }
   }
 
+<<<<<<< HEAD
+=======
+  // Método para processar o relatório específico
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   Future<List<Map<String, dynamic>>> _generateSpecificReport(
       String reportType, String period) async {
     DateTime startDate;
     DateTime endDate;
 
+<<<<<<< HEAD
     // Configurando o intervalo de datas com base no período selecionado
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
     if (period == 'Dia') {
       startDate = DateTime.now();
       endDate = DateTime.now();
@@ -99,6 +109,7 @@ abstract class _RelatoriosControllerBase with Store {
       throw Exception('Período desconhecido');
     }
 
+<<<<<<< HEAD
     List<Map<String, dynamic>> reportData = [];
 
     // Selecionando a função apropriada com base no tipo de relatório
@@ -106,6 +117,15 @@ abstract class _RelatoriosControllerBase with Store {
       case 'Novos Clientes':
         reportData = await fetchNovosClientes(startDate, endDate);
         break;
+=======
+    // Variável para armazenar os dados do relatório
+    List<Map<String, dynamic>> reportData = [];
+
+    switch (reportType) {
+      case 'Novos Clientes':
+        reportData = await fetchNovosClientes(startDate, endDate);
+
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
       case 'Aniversários Clientes':
         reportData = await fetchAniversariosClientes(startDate, endDate);
         break;
@@ -121,16 +141,23 @@ abstract class _RelatoriosControllerBase with Store {
       case 'Serviços Realizados':
         reportData = await fetchServicosRealizados(startDate, endDate);
         break;
+<<<<<<< HEAD
       case 'Agendamentos Cancelados':
         reportData = await fetchAgendamentosCancelados(startDate, endDate);
         break;
       case 'Agendamentos Realizados':
         reportData = await fetchAgendamentosRealizados(startDate, endDate);
         break;
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
       default:
         throw Exception('Relatório desconhecido');
     }
 
+<<<<<<< HEAD
+=======
+    // Retorne os dados processados
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
     return reportData;
   }
 
@@ -222,6 +249,7 @@ abstract class _RelatoriosControllerBase with Store {
     }
   }
 
+<<<<<<< HEAD
   Future<List<Map<String, dynamic>>> fetchAgendamentosCancelados(
       DateTime startDate, DateTime endDate) async {
     List<Agendamento> agendamentos =
@@ -246,6 +274,8 @@ abstract class _RelatoriosControllerBase with Store {
     return agendamentosMap;
   }
 
+=======
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   // Formatação da data
   String formatDate(String date) {
     try {

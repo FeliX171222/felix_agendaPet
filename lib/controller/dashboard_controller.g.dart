@@ -186,6 +186,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$servicoAtom =
       Atom(name: '_DashboardControllerBase.servico', context: context);
 
@@ -218,6 +219,11 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   late final _$isLoadingAtom =
       Atom(name: '_DashboardControllerBase.isLoading', context: context);
 
@@ -250,6 +256,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$isLoadingSearchPetAtom = Atom(
       name: '_DashboardControllerBase.isLoadingSearchPet', context: context);
 
@@ -266,6 +273,8 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   late final _$isTimeSlotEnabledAtom = Atom(
       name: '_DashboardControllerBase.isTimeSlotEnabled', context: context);
 
@@ -282,6 +291,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$isUpdateClientAtom =
       Atom(name: '_DashboardControllerBase.isUpdateClient', context: context);
 
@@ -378,6 +388,8 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   late final _$errorMessageAtom =
       Atom(name: '_DashboardControllerBase.errorMessage', context: context);
 
@@ -426,6 +438,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
   late final _$selectedServicoAtom =
       Atom(name: '_DashboardControllerBase.selectedServico', context: context);
 
@@ -490,6 +503,10 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
   late final _$agendamentosCanceladosMesAtom = Atom(
       name: '_DashboardControllerBase.agendamentosCanceladosMes',
       context: context);
@@ -508,6 +525,13 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     });
   }
 
+<<<<<<< HEAD
+=======
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
   late final _$cadastrarClienteAsyncAction = AsyncAction(
       '_DashboardControllerBase.cadastrarCliente',
       context: context);
@@ -537,6 +561,10 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     return _$fetchClientsAsyncAction.run(() => super.fetchClients());
   }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   late final _$deleteClientsAsyncAction =
       AsyncAction('_DashboardControllerBase.deleteClients', context: context);
 
@@ -546,6 +574,11 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.deleteClients(clientes, userId));
   }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   late final _$searchPetsAsyncAction =
       AsyncAction('_DashboardControllerBase.searchPets', context: context);
 
@@ -610,8 +643,20 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.carregarAgendamentos());
   }
 
+<<<<<<< HEAD
   late final _$carregarAgendamentosCanceladosAsyncAction = AsyncAction(
       '_DashboardControllerBase.carregarAgendamentosCancelados',
+=======
+<<<<<<< HEAD
+  late final _$carregarAgendamentosCanceladosAsyncAction = AsyncAction(
+      '_DashboardControllerBase.carregarAgendamentosCancelados',
+=======
+<<<<<<< HEAD
+=======
+  late final _$verificarDisponibilidadeAsyncAction = AsyncAction(
+      '_DashboardControllerBase.verificarDisponibilidade',
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
       context: context);
 
   @override
@@ -620,6 +665,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.carregarAgendamentosCancelados());
   }
 
+<<<<<<< HEAD
   late final _$getAvailableTimeSlotsAsyncAction = AsyncAction(
       '_DashboardControllerBase.getAvailableTimeSlots',
       context: context);
@@ -630,6 +676,12 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.getAvailableTimeSlots(selectedDate));
   }
 
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
+>>>>>>> 9a40c0d07c4c9330ade84bd58177016c97fdee04
   late final _$salvarAgendamentoAsyncAction = AsyncAction(
       '_DashboardControllerBase.salvarAgendamento',
       context: context);
@@ -649,6 +701,30 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
   Future<void> excluirAgendamento(Agendamento agendamento, String motivo) {
     return _$excluirAgendamentoAsyncAction
         .run(() => super.excluirAgendamento(agendamento, motivo));
+<<<<<<< HEAD
+  }
+
+  late final _$updateAgendamentoAsyncAction = AsyncAction(
+      '_DashboardControllerBase.updateAgendamento',
+      context: context);
+
+  @override
+  Future<void> updateAgendamento(
+      String agendamentoId, Agendamento agendamento, String motivo) {
+    return _$updateAgendamentoAsyncAction
+        .run(() => super.updateAgendamento(agendamentoId, agendamento, motivo));
+  }
+
+  late final _$searchAgendamentosAsyncAction = AsyncAction(
+      '_DashboardControllerBase.searchAgendamentos',
+      context: context);
+
+  @override
+  Future<void> searchAgendamentos(String query) {
+    return _$searchAgendamentosAsyncAction
+        .run(() => super.searchAgendamentos(query));
+=======
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
   }
 
   late final _$updateAgendamentoAsyncAction = AsyncAction(
@@ -682,6 +758,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.searchAgendamentos(query));
   }
 
+<<<<<<< HEAD
   late final _$fecthServicoAsyncAction =
       AsyncAction('_DashboardControllerBase.fecthServico', context: context);
 
@@ -715,6 +792,7 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
         .run(() => super.updateServico(servicoId, servico));
   }
 
+<<<<<<< HEAD
   late final _$searchServicesAsyncAction =
       AsyncAction('_DashboardControllerBase.searchServices', context: context);
 
@@ -723,6 +801,10 @@ mixin _$DashboardController on _DashboardControllerBase, Store {
     return _$searchServicesAsyncAction.run(() => super.searchServices(query));
   }
 
+=======
+=======
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
   late final _$_DashboardControllerBaseActionController =
       ActionController(name: '_DashboardControllerBase', context: context);
 
@@ -773,8 +855,23 @@ petIdToUpdate: ${petIdToUpdate},
 clients: ${clients},
 pets: ${pets},
 agendamentos: ${agendamentos},
+<<<<<<< HEAD
 servico: ${servico},
 availableTimeSlots: ${availableTimeSlots},
+<<<<<<< HEAD
+=======
+isLoading: ${isLoading},
+isLoadingPet: ${isLoadingPet},
+isTimeSlotEnabled: ${isTimeSlotEnabled},
+errorMessage: ${errorMessage},
+selectedClient: ${selectedClient},
+selectedPet: ${selectedPet},
+selectedServico: ${selectedServico},
+selectedTimeSlot: ${selectedTimeSlot},
+agendamentosDia: ${agendamentosDia},
+agendamentosMes: ${agendamentosMes}
+=======
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
 isLoading: ${isLoading},
 isLoadingPet: ${isLoadingPet},
 isLoadingSearchPet: ${isLoadingSearchPet},
@@ -787,12 +884,20 @@ currentClientId: ${currentClientId},
 racasSelecionadas: ${racasSelecionadas},
 errorMessage: ${errorMessage},
 selectedClient: ${selectedClient},
+<<<<<<< HEAD
 selectedPet: ${selectedPet},
 selectedServico: ${selectedServico},
 selectedTimeSlot: ${selectedTimeSlot},
 agendamentosDia: ${agendamentosDia},
 agendamentosMes: ${agendamentosMes},
 agendamentosCanceladosMes: ${agendamentosCanceladosMes}
+<<<<<<< HEAD
+=======
+=======
+selectedPet: ${selectedPet}
+>>>>>>> 204f589ca0a6ab9755dbcd8490f9c3a925a08369
+>>>>>>> cfe8b081c57c224c1bc3e1e87517189321563a6b
+>>>>>>> 223d6506fd582454a94d09826bd478ff49f01485
     ''';
   }
 }
